@@ -1,2 +1,2 @@
-# sraper
+# scraper
 NodeJS Web Scraper
