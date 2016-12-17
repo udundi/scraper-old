@@ -28,8 +28,8 @@ exports.getReviews = function(req, res) {
           }
         });
       });
-      res.status(200).send(products);
-      console.timeEnd('scraper');
     }
+    res.status(200).send(products);
+    console.timeEnd('scraper');
   })
 }
