@@ -25,8 +25,8 @@ app.use(function(req, res, next) {
 });
 
 app.get('/amazon/get_reviews', function(req, res){
-  // var merchantId = req.param('merchant_id');
-  var merchantId = 'A4FKUX0RRJ699';
+  var merchantId = req.param('merchant_id');
+  // var merchantId = 'A4FKUX0RRJ699';
   url = 'https://www.amazon.com/s?me='+merchantId;
 
   request(url, function(error, response, html){
