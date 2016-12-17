@@ -3,6 +3,10 @@
   "version": "0.0.1",
   "description": "NodeJS Web Scraper",
   "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "monitor": "nodemon app.js"
+  },
   "author": "Nathan",
   "dependencies": {
     "body-parser": "^1.15.2",
