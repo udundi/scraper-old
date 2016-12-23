@@ -9,9 +9,11 @@
   },
   "author": "Nathan",
   "dependencies": {
+    "async": "^2.1.4",
     "body-parser": "^1.15.2",
     "cheerio": "latest",
     "express": "latest",
+    "lodash": "^4.17.2",
     "morgan": "^1.7.0",
     "request": "latest",
     "underscore": "^1.8.3",
