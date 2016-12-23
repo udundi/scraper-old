@@ -1,11 +1,12 @@
-var express = require('express');
-// var http    = require('http');
-var fs      = require('fs');
-var amazon  = require('./api/amazon');
-var morgan  = require('morgan');
-var parser  = require('body-parser');
-var logger  = morgan('combined');
-var app     = express();
+var express   = require('express');
+var http      = require('http');
+var fs        = require('fs');
+var amazon    = require('./api/amazon');
+var morgan    = require('morgan');
+var parser    = require('body-parser');
+var useragent = require('express-useragent');
+var logger    = morgan('combined');
+var app       = express();
 
 //log all requests
 // app.use(express.logger());
