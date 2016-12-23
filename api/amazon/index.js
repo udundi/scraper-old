@@ -1,9 +1,9 @@
-var app         = require('../../../app.js');
+var app         = require('../../app.js');
 var url         = require('url');
 var querystring = require('querystring');
 var request     = require('request');
 var cheerio     = require('cheerio');
-var scriptAdded = false;
+// var scriptAdded = false;
 
 exports.getReviews = function(req, res) {
   var merchantId = req.query['merchantId'];
@@ -32,7 +32,8 @@ exports.getReviews = function(req, res) {
       // });
 
       var products = [];
-      $('.s-result-item').each(function(i, elem) {
+      $('.s-result-item').each(function(i, elem){
+        console.log(elem);
         var data = $(this);
         var dataItem = data.children().find('.s-access-detail-page');
         var dataReviews = data.children().last().children().last('a').text().split('\n\n');
@@ -47,8 +48,8 @@ exports.getReviews = function(req, res) {
         });
       });
     }
-    console.log('-------PRODUCTS--------');
-    console.log(products);
+    // console.log('-------PRODUCTS--------');
+    // console.log(products);
     res.status(200).send(products);
     // console.timeEnd('scraper');
   })
