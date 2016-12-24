@@ -16,6 +16,7 @@
     "express-useragent": "^1.0.4",
     "lodash": "^4.17.2",
     "morgan": "^1.7.0",
+    "phantom": "^3.2.1",
     "request": "latest",
     "underscore": "^1.8.3",
     "url-parse": "^1.1.7"
