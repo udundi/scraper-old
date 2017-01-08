@@ -1,2 +1,3 @@
 # scraper
-NodeJS Web Scraper
+Amazon Products Web Scraper (NodeJS + Express + Phantom) Edit
+
