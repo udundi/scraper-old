@@ -2,6 +2,7 @@ var express   = require('express');
 var http      = require('http');
 var fs        = require('fs');
 var amazon    = require('./api/amazon');
+var instagram = require('./api/instagram');
 var morgan    = require('morgan');
 var parser    = require('body-parser');
 var logger    = morgan('combined');
@@ -26,6 +27,7 @@ app.use(function(req, res, next) {
 });
 
 app.get('/amazon/getReviews', amazon.getReviews);
+app.get('/instagram/getReviews', instagram.getData);
 
 // [START server]
 var server = app.listen(process.env.PORT || 8080, function () {
