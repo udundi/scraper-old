@@ -27,7 +27,8 @@ app.use(function(req, res, next) {
 });
 
 app.get('/amazon/getReviews', amazon.getReviews);
-app.get('/instagram/getData', instagram.getData);
+app.get('/instagram/getUser', instagram.getUser);
+app.get('/youtube/getChannel', instagram.getChannel);
 
 // [START server]
 var server = app.listen(process.env.PORT || 8080, function () {

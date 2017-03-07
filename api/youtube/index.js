@@ -4,11 +4,11 @@ var querystring = require('querystring');
 var phantom     = require('phantom');
 var cheerio     = require('cheerio');
 
-exports.getUser = function(req, res){
-  var username = req.query['username'];
-  // console.log('-------USERNAME--------');
-  // console.log(username);
-  var url = 'https://www.instagram.com/'+username;
+exports.getChannel = function(req, res){
+  var userId = req.query['userId'];
+  // console.log('-------userId--------');
+  // console.log(userId);
+  var url = 'https://www.youtube.com/channel/'+userId;
   var _ph, _page, _outObj;
 
   function sendData(data) {
@@ -20,6 +20,7 @@ exports.getUser = function(req, res){
     return _ph.createPage();
   }).then(function(page) {
     _page = page;
+    // return _page.open(url+'&page='+i);
     return _page.open(url);
   }).then(function(status) {
     return _page.evaluate(function() {
@@ -29,16 +30,18 @@ exports.getUser = function(req, res){
     var $ = cheerio.load(html);
     var data = [];
 
-    var imagesArr = $('img');
-    $(imagesArr).each(function(i, elem) {
-      var attrs = elem.attribs;
-      data.push({
-        'alt': attrs['alt'],
-        'id': attrs['id'],
-        'class': attrs['class'],
-        'src': attrs['src']
-      })
-    });
+    // console.log()
+
+    // var imagesArr = $('img');
+    // $(imagesArr).each(function(i, elem) {
+    //   var attrs = elem.attribs;
+    //   data.push({
+    //     'alt': attrs['alt'],
+    //     'id': attrs['id'],
+    //     'class': attrs['class'],
+    //     'src': attrs['src']
+    //   })
+    // });
     
     return sendData(data);
 
@@ -47,4 +50,5 @@ exports.getUser = function(req, res){
   }).catch(function(e){
     console.log(e);
   });
+  // })(pages);
 }
