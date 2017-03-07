@@ -3,6 +3,7 @@ var http      = require('http');
 var fs        = require('fs');
 var amazon    = require('./api/amazon');
 var instagram = require('./api/instagram');
+var youtube   = require('./api/youtube');
 var morgan    = require('morgan');
 var parser    = require('body-parser');
 var logger    = morgan('combined');
