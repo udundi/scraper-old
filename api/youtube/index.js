@@ -6,8 +6,6 @@ var cheerio     = require('cheerio');
 
 exports.getChannel = function(req, res){
   var userId = req.query['userId'];
-  // console.log('-------userId--------');
-  // console.log(userId);
   var url = 'https://www.youtube.com/channel/'+userId;
   var _ph, _page, _outObj;
 
@@ -20,7 +18,6 @@ exports.getChannel = function(req, res){
     return _ph.createPage();
   }).then(function(page) {
     _page = page;
-    // return _page.open(url+'&page='+i);
     return _page.open(url);
   }).then(function(status) {
     return _page.evaluate(function() {
@@ -28,20 +25,8 @@ exports.getChannel = function(req, res){
     });
   }).then(function(html) {
     var $ = cheerio.load(html);
-    var data = [];
 
-    // console.log()
-
-    // var imagesArr = $('img');
-    // $(imagesArr).each(function(i, elem) {
-    //   var attrs = elem.attribs;
-    //   data.push({
-    //     'alt': attrs['alt'],
-    //     'id': attrs['id'],
-    //     'class': attrs['class'],
-    //     'src': attrs['src']
-    //   })
-    // });
+    var data = $('ul#browse-items-primary script').html();
     
     return sendData(data);
 
@@ -50,5 +35,4 @@ exports.getChannel = function(req, res){
   }).catch(function(e){
     console.log(e);
   });
-  // })(pages);
 }

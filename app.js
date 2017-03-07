@@ -18,9 +18,9 @@ app.use(parser.urlencoded({ extended: false }));
 
 // Set CORS Values:
 app.use(function(req, res, next) {
-  console.log('------HEADERS-------');
-  console.log(app.locals);
-  console.log('------END_HEADERS-------');
+  // console.log('------HEADERS-------');
+  // console.log(app.locals);
+  // console.log('------END_HEADERS-------');
   res.header('Access-Control-Allow-Origin', '*');
   res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
   // res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With');
