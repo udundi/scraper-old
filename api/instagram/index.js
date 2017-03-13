@@ -3,16 +3,23 @@ var url         = require('url');
 var querystring = require('querystring');
 var phantom     = require('phantom');
 var cheerio     = require('cheerio');
+var _           = require('underscore');
 
 exports.getUser = function(req, res){
   var username = req.query['username'];
   // console.log('-------USERNAME--------');
   // console.log(username);
   var url = 'https://www.instagram.com/'+username;
-  var _ph, _page, _outObj;
+  var _ph, _page, _outObj, _maxId;
+  var body = [];
+
+  function pushData(data){
+    body.push(data);
+  };
 
   function sendData(data) {
-    res.status(200).send(data);
+    body.push(data);
+    res.status(200).send(_.flatten(body));
   };
 
   phantom.create(['--ignore-ssl-errors=yes']).then(function(ph) {
@@ -23,22 +30,25 @@ exports.getUser = function(req, res){
     return _page.open(url);
   }).then(function(status) {
     return _page.evaluate(function() {
-      return document.body.innerHTML;
+      return document.defaultView._sharedData;
     });
-  }).then(function(html) {
-    var $ = cheerio.load(html);
-    var data = [];
+  }).then(function(data) {
+    var user = _.pluck(data.entry_data.ProfilePage, 'user');
+    var data = user[0]['media'].nodes;
+    _maxId = _.last(data).id
+    
+    return pushData(data);
 
-    var imagesArr = $('img');
-    $(imagesArr).each(function(i, elem) {
-      var attrs = elem.attribs;
-      data.push({
-        'alt': attrs['alt'],
-        'id': attrs['id'],
-        'class': attrs['class'],
-        'src': attrs['src']
-      })
+    _page.close();
+  }).then(function() {
+    return _page.open(url+'/?max_id='+_maxId);
+  }).then(function(status) {
+    return _page.evaluate(function() {
+      return document.defaultView._sharedData;
     });
+  }).then(function(data) {
+    var user = _.pluck(data.entry_data.ProfilePage, 'user');
+    var data = user[0]['media'].nodes;
     
     return sendData(data);
 
@@ -47,4 +57,5 @@ exports.getUser = function(req, res){
   }).catch(function(e){
     console.log(e);
   });
+
 }
