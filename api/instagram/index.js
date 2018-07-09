@@ -33,8 +33,8 @@ exports.getUser = function(req, res){
       return document.defaultView._sharedData;
     });
   }).then(function(data) {
-    var user = _.pluck(data.entry_data.ProfilePage, 'user');
-    var data = user[0]['media'].nodes;
+    var user = data.entry_data.ProfilePage[0].graphql.user;
+    var data = user.edge_owner_to_timeline_media.edges;
     _maxId = _.last(data).id
     
     return pushData(data);
@@ -47,8 +47,10 @@ exports.getUser = function(req, res){
       return document.defaultView._sharedData;
     });
   }).then(function(data) {
-    var user = _.pluck(data.entry_data.ProfilePage, 'user');
-    var data = user[0]['media'].nodes;
+    // var user = _.pluck(data.entry_data.ProfilePage, 'user');
+    // var data = user[0]['media'].nodes;
+    var user = data.entry_data.ProfilePage[0].graphql.user;
+    var data = user.edge_owner_to_timeline_media.edges;
     
     return sendData(data);
 
