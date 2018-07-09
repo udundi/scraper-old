@@ -6,7 +6,7 @@ var cheerio     = require('cheerio');
 
 exports.getChannel = function(req, res){
   var userId = req.query['userId'];
-  var url = 'https://www.youtube.com/channel/'+userId;
+  var url = 'https://www.youtube.com/user/'+userId;
   var _ph, _page, _outObj;
 
   function sendData(data) {
