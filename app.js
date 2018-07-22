@@ -30,6 +30,7 @@ app.use(function(req, res, next) {
 app.get('/amazon/getReviews', amazon.getReviews);
 app.get('/instagram/getUser', instagram.getUser);
 app.get('/youtube/getChannel', youtube.getChannel);
+app.get('/youtube/getBanner', youtube.getBanner);
 
 // [START server]
   var server = app.listen(process.env.PORT || 8080, function () {
