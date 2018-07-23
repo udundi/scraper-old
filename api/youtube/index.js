@@ -6,7 +6,8 @@ var cheerio     = require('cheerio');
 
 exports.getVideos = function(req, res){
   var userId = req.query['userId'];
-  var url = 'https://www.youtube.com/user/'+userId;
+  var type = req.query['type'];
+  var url = 'https://www.youtube.com/'+type+'/'+userId+'/videos';
   var _ph, _page, _outObj;
 
   function sendData(data) {
@@ -26,13 +27,14 @@ exports.getVideos = function(req, res){
   }).then(function(html) {
     var $ = cheerio.load(html);
 
-    // var foo = $('ul#browse-items-primary script');
-    // console.log(foo);
-
-    console.log(html);
-
-    var data = $('ul#browse-items-primary script').html();
+    var data = $('ul#channels-browse-content-grid').find('li > div').slice(0, 12).map(function() {
+      var _obj = {};
+      _obj.id = $(this).attr('data-context-item-id');
+      _obj.url = 'https://www.youtube.com/watch?v=' + _obj.id;
+      return _obj;
+    }).get();
     
+    // return sendData(JSON.stringify(data));
     return sendData(data);
 
     _page.close();
@@ -44,7 +46,8 @@ exports.getVideos = function(req, res){
 
 exports.getBanner = function(req, res){
   var userId = req.query['userId'];
-  var url = 'https://www.youtube.com/user/'+userId;
+  var type = req.query['type'];
+  var url = 'https://www.youtube.com/'+type+'/'+userId;
   var _ph, _page, _outObj;
 
   function sendData(data) {
