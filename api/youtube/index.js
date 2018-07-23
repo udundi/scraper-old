@@ -4,7 +4,7 @@ var querystring = require('querystring');
 var phantom     = require('phantom');
 var cheerio     = require('cheerio');
 
-exports.getChannel = function(req, res){
+exports.getVideos = function(req, res){
   var userId = req.query['userId'];
   var url = 'https://www.youtube.com/user/'+userId;
   var _ph, _page, _outObj;
