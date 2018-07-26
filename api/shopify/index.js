@@ -4,6 +4,8 @@ var querystring = require('querystring');
 
 exports.getPage = function(req, res) {
   var embedUrl = req.query['embedUrl'];
+
+  console.log(embedUrl);
 	
 	res.merge('', {
 	  // sourceUrl: 'http://www.bbc.co.uk/news',                             // external url to fetch
