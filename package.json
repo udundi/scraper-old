@@ -16,6 +16,7 @@
     "express-useragent": "^1.0.4",
     "lodash": "^4.17.2",
     "morgan": "^1.7.0",
+    "node-iframe-replacement": "^0.1.1",
     "phantom": "^4.0.1",
     "request": "latest",
     "underscore": "^1.8.3",
