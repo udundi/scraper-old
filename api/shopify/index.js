@@ -9,7 +9,7 @@ exports.getPage = function(req, res) {
 	
 	res.merge('', {
 	  // sourceUrl: 'http://www.bbc.co.uk/news',                             // external url to fetch
-	  sourceUrl: decodeURIComponent(url)
+	  sourceUrl: url
 	  // sourcePlaceholder: 'div[data-entityid="container-top-stories#1"]'   // css selector to inject our content into
 	});
 }
