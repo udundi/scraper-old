@@ -5,7 +5,7 @@ var phantom     = require('phantom');
 var cheerio     = require('cheerio');
 
 
-exports.getReviews = function(req, res){
+exports.getReviews = function(req, res) {
   var merchantId = req.query['merchantId'];
   console.log('-------MERCHANT-ID--------');
   var url = 'https://www.amazon.com/s?me='+merchantId;
@@ -72,4 +72,4 @@ exports.getReviews = function(req, res){
       console.log(e);
     });
   })(pages);
-}
+};

@@ -5,7 +5,7 @@ var phantom     = require('phantom');
 var cheerio     = require('cheerio');
 var _           = require('underscore');
 
-exports.getUser = function(req, res){
+exports.getUser = function(req, res) {
   var username = req.query['username'];
   // console.log('-------USERNAME--------');
   // console.log(username);
@@ -62,5 +62,4 @@ exports.getUser = function(req, res){
   }).catch(function(e){
     console.log(e);
   });
-
 }

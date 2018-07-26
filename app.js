@@ -2,9 +2,10 @@ var express   = require('express');
 var http      = require('http');
 var fs        = require('fs');
 var amazon    = require('./api/amazon');
+var compressor   = require('./api/compressor');
 var instagram = require('./api/instagram');
-var youtube   = require('./api/youtube');
 var shopify   = require('./api/shopify');
+var youtube   = require('./api/youtube');
 var iframeReplacement = require('./api/shopify/node-iframe-replacement.js');
 var morgan    = require('morgan');
 var parser    = require('body-parser');
@@ -32,11 +33,15 @@ app.use(function(req, res, next) {
   next();
 });
 
+// app.use('/dist', express.static('public'));
+app.use('/dist', express.static('public'));
+
 app.get('/amazon/getReviews', amazon.getReviews);
+app.get('/compressor/getResize', compressor.getResize);
 app.get('/instagram/getUser', instagram.getUser);
+app.get('/shopify/getPage', shopify.getPage);
 app.get('/youtube/getVideos', youtube.getVideos);
 app.get('/youtube/getBanner', youtube.getBanner);
-app.get('/shopify/getPage', shopify.getPage);
 
 // [START server]
   var server = app.listen(process.env.PORT || 8080, function () {
