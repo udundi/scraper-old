@@ -26,8 +26,7 @@ module.exports = function(req, res, next) {
             // pass a jquery version of the html along with a copy of the model
             model.transform($template, model);
           }
-
-          console.log($template.html());
+          
           // return merged content
           res.status(200).send($template.html());
 
