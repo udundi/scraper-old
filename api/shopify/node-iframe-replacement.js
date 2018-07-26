@@ -2,9 +2,11 @@
 
 var isUrl = require('is-url'),              // module use to verify the sourceUrl is an actual URL
     cheerio = require('cheerio'),           // used to convert raw html into jQuery style object to we can use css selectors
-    request = require('request-promise'),   // promise based request object
-    NodeCache = require('node-cache'),    // auto expiring in memory caching collection
-    cache = new NodeCache({ stdTTL: 300 }); // cache source HTML for 5 minutes, after which we fetch a new version
+    request = require('request-promise'),
+    NodeCache = require('node-cache');    // auto expiring in memory caching collection
+    // cache = new NodeCache({ stdTTL: 300 }); // cache source HTML for 5 minutes, after which we fetch a new version
+
+    // request = require('request-promise'),   // promise based request object
 
 module.exports = function(req, res, next) {
 
@@ -100,37 +102,48 @@ function resolveTemplate(sourceUrl) {
   return new Promise(function(resolve, reject) {
 
       // if its a url and we have the contents in cache
-      if (isUrl(sourceUrl) && cache.get(sourceUrl)) {
+      // if (isUrl(sourceUrl) && cache.get(sourceUrl)) {
 
-          // get source html from cache
-          var html = cache.get(sourceUrl);
+      //     // get source html from cache
+      //     var html = cache.get(sourceUrl);
 
-          // covert html into jquery object
-          var $ = cheerio.load(html);
+      //     // covert html into jquery object
+      //     var $ = cheerio.load(html);
 
-          // return source as a jquery style object
-          resolve($);
-      }
-      else if (isUrl(sourceUrl)) {
+      //     // return source as a jquery style object
+      //     resolve($);
+      // }
+      // else 
+        if (isUrl(sourceUrl)) {
 
           var params = {
-              uri: sourceUrl,
+              method: 'GET',
+              // followRedirect: true,
+              // maxRedirects: 2,
+              // removeRefererHeader: true,
+              followOriginalHttpMethod: true,
+              uri: 'https://bunkerbranding.com/',
+              qs: {
+                preview_theme_id: '12543787053'
+              },
+              gzip: true,
+              resolveWithFullResponse: true,
               headers: {
-                  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
               }
            };
 
           // request the source url
-          return request(params).then(function(html) {
-
+          return request(params).then(function(res) {
+              console.log(res);
               // convert html into jquery style object so we can use selectors
-              var $ = cheerio.load(html);
+              var $ = cheerio.load(res.body);
 
               // insert base tag to ensure links/scripts/styles load correctly
-              $('head').prepend('<base href="' + sourceUrl + '">');
+              // $('head').prepend('<base href="' + sourceUrl + '">');
 
               // cache result as HTML so we dont have to keep getting it for future requests and it remains clean
-              cache.set(sourceUrl, $.html());
+              // cache.set(sourceUrl, $.html());
 
               // resolve with jquery object containing content
               resolve($);
