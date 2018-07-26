@@ -2,11 +2,9 @@
 
 var isUrl = require('is-url'),              // module use to verify the sourceUrl is an actual URL
     cheerio = require('cheerio'),           // used to convert raw html into jQuery style object to we can use css selectors
-    request = require('request-promise'),
-    NodeCache = require('node-cache');    // auto expiring in memory caching collection
-    // cache = new NodeCache({ stdTTL: 300 }); // cache source HTML for 5 minutes, after which we fetch a new version
-
-    // request = require('request-promise'),   // promise based request object
+    request = require('request-promise'),   // promise based request object
+    NodeCache = require('node-cache'),    // auto expiring in memory caching collection
+    cache = new NodeCache({ stdTTL: 300 }); // cache source HTML for 5 minutes, after which we fetch a new version
 
 module.exports = function(req, res, next) {
 
@@ -14,8 +12,10 @@ module.exports = function(req, res, next) {
   res.merge = function(view, model, callback) {
 
       if (!model.sourceUrl) {
+        
         // no .sourceUrl, therefore process this as normal
         res.render(view, model, callback);
+
       } else if (!view) {
 
         // if no template selector provided, use body tag
@@ -92,6 +92,20 @@ module.exports = function(req, res, next) {
   next();
 };
 
+function getQuery(name, url) {
+  // if (!url) url = window.location.href;
+  name = name.replace(/[\[\]]/g, '\\$&');
+  var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+      results = regex.exec(url);
+  if (!results) return null;
+  if (!results[2]) return '';
+  return decodeURIComponent(results[2].replace(/\+/g, ' '));
+}
+
+function getPath(url) {
+  return url.split(/[?#]/)[0];
+}
+
 /**
 * @description Converts source url to $ object
 * @param {string} sourceUrl - url to external html content
@@ -101,7 +115,7 @@ function resolveTemplate(sourceUrl) {
 
   return new Promise(function(resolve, reject) {
 
-      // if its a url and we have the contents in cache
+      // // if its a url and we have the contents in cache
       // if (isUrl(sourceUrl) && cache.get(sourceUrl)) {
 
       //     // get source html from cache
@@ -116,34 +130,30 @@ function resolveTemplate(sourceUrl) {
       // else 
         if (isUrl(sourceUrl)) {
 
+          var pathUrl = getPath(sourceUrl);
+          var previewThemeId = getQuery('preview_theme_id', sourceUrl);
+
           var params = {
-              method: 'GET',
-              // followRedirect: true,
-              // maxRedirects: 2,
-              // removeRefererHeader: true,
-              followOriginalHttpMethod: true,
-              uri: 'https://bunkerbranding.com/',
+              uri: pathUrl,
               qs: {
-                preview_theme_id: '12543787053'
+                'preview_theme_id': previewThemeId
               },
-              gzip: true,
-              resolveWithFullResponse: true,
               headers: {
-                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_4) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.133 Safari/537.36'
+                'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_11_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
               }
            };
 
           // request the source url
-          return request(params).then(function(res) {
-              console.log(res);
+          return request(params).then(function(html) {
+
               // convert html into jquery style object so we can use selectors
-              var $ = cheerio.load(res.body);
+              var $ = cheerio.load(html);
 
               // insert base tag to ensure links/scripts/styles load correctly
-              // $('head').prepend('<base href="' + sourceUrl + '">');
+              $('head').prepend('<base href="' + pathUrl + '">');
 
               // cache result as HTML so we dont have to keep getting it for future requests and it remains clean
-              // cache.set(sourceUrl, $.html());
+              cache.set(sourceUrl, $.html());
 
               // resolve with jquery object containing content
               resolve($);
