@@ -2,7 +2,7 @@ var express   = require('express');
 var http      = require('http');
 var fs        = require('fs');
 var amazon    = require('./api/amazon');
-var compressor   = require('./api/compressor');
+// var compressor   = require('./api/compressor');
 var instagram = require('./api/instagram');
 var shopify   = require('./api/shopify');
 var youtube   = require('./api/youtube');
@@ -37,8 +37,8 @@ app.use(function(req, res, next) {
 app.use('/dist', express.static('public'));
 
 app.get('/amazon/getReviews', amazon.getReviews);
-app.get('/compressor/getResize', compressor.getResize);
 app.get('/instagram/getUser', instagram.getUser);
+app.get('/instagram/getFollowers', instagram.getFollowers);
 app.get('/shopify/getPage', shopify.getPage);
 app.get('/youtube/getVideos', youtube.getVideos);
 app.get('/youtube/getBanner', youtube.getBanner);

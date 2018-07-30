@@ -3,6 +3,12 @@ var url         = require('url');
 var querystring = require('querystring');
 var phantom     = require('phantom');
 var cheerio     = require('cheerio');
+var CronJob = require('cron').CronJob;
+
+
+new CronJob('* * * * * *', function() {
+  console.log('You will see this message every second');
+}, null, true, 'America/Los_Angeles');
 
 exports.getVideos = function(req, res){
   var userId = req.query['userId'];
