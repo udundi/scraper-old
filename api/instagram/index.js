@@ -3,12 +3,36 @@ var url         = require('url');
 var querystring = require('querystring');
 var phantom     = require('phantom');
 var cheerio     = require('cheerio');
-var CronJob     = require('cron').CronJob;
+var request     = require('request');
+// var CronJob     = require('cron').CronJob;
 var _           = require('underscore');
 
-new CronJob('*/5 * * * *', function() {
-  console.log('You will see this message every 5 minutes');
-}, null, true, 'America/Los_Angeles');
+// new CronJob('*/30 * * * * *', function() {
+//   var baseUrl = 'https://udundi-theme-editor.herokuapp.com/api/shopify_api_product/getContent/';
+//   var url = baseUrl + 'bunker-branding-co.myshopify.com';
+  
+//   request(url, { json: true }, function(err, res, body) {
+//     if (err) { return console.log(err); }
+
+//     _.each(body.config.pages, function(page) {
+//       _.each(page.components, function(component) {
+//         if(component.cid === 'udtInstagramFeed') {
+//           var uil = 'http://localhost:8080/instagram/getUser?username='+component.username;
+//           // var media = exports.getUser({'query': { 'username': component.username }});
+//           // var media = request(uil + component.username);
+//           request(uil, { json: true }, function(err, res, body) {
+//             if (err) { return console.log(err); }
+//             console.log(body);
+//           });
+
+//         }
+//       });
+//     });
+
+//   });
+
+//   // console.log('You will see this message every 5 minutes');
+// }, null, true, 'America/Los_Angeles');
 
 exports.getUser = function(req, res) {
   var username = req.query['username'];
