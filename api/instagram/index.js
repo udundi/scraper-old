@@ -4,35 +4,43 @@ var querystring = require('querystring');
 var phantom     = require('phantom');
 var cheerio     = require('cheerio');
 var request     = require('request');
-// var CronJob     = require('cron').CronJob;
+var CronJob     = require('cron').CronJob;
 var _           = require('underscore');
 
-// new CronJob('*/30 * * * * *', function() {
-//   var baseUrl = 'https://udundi-theme-editor.herokuapp.com/api/shopify_api_product/getContent/';
-//   var url = baseUrl + 'bunker-branding-co.myshopify.com';
+new CronJob('0 0 */12 * * *', function() {
+  var baseUrl = 'https://udundi-theme-editor.herokuapp.com/api/shopify_api_product/getContent/';
+  var url = baseUrl + 'bunker-branding-co.myshopify.com';
+  var _id = '5b352f314ef7c0140084f7d5';
+
+  function putData(data) {
+    request({
+      method: 'PUT',
+      uri: 'https://udundi-theme-editor.herokuapp.com/api/shopify/' + _id,
+      json: {config: data}
+    });
+    console.log('----- UPDATE THAT SHIZZ -----');
+  };
   
-//   request(url, { json: true }, function(err, res, body) {
-//     if (err) { return console.log(err); }
+  request(url, { json: true }, function(err, res, body) {
+    if (err) { return console.log(err); }
+    data = body.config;
+    _.each(data.pages, function(page) {
+      _.map(page.components, function(cmp) {
+        if (cmp.cid === 'udtInstagramFeed') {
+          var uil = 'https://udundi-scraper.herokuapp.com/instagram/getUser?username=' + cmp.username;
+          request(uil, {json: true}, function(err, res, body) {
+            if (err) { return console.log(err); }
+            cmp.media = body;
+            putData(data);
+          });
+        }
+      });
+    });
+  });
 
-//     _.each(body.config.pages, function(page) {
-//       _.each(page.components, function(component) {
-//         if(component.cid === 'udtInstagramFeed') {
-//           var uil = 'http://localhost:8080/instagram/getUser?username='+component.username;
-//           // var media = exports.getUser({'query': { 'username': component.username }});
-//           // var media = request(uil + component.username);
-//           request(uil, { json: true }, function(err, res, body) {
-//             if (err) { return console.log(err); }
-//             console.log(body);
-//           });
-
-//         }
-//       });
-//     });
-
-//   });
-
-//   // console.log('You will see this message every 5 minutes');
-// }, null, true, 'America/Los_Angeles');
+  console.log('----- UPDATE INSTAGRAM FEED ------');
+  // console.log('You will see this message every 5 minutes');
+}, null, true, 'America/Los_Angeles');
 
 exports.getUser = function(req, res) {
   var username = req.query['username'];
