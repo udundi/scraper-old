@@ -7,7 +7,7 @@ var request     = require('request');
 var CronJob     = require('cron').CronJob;
 var _           = require('underscore');
 
-new CronJob('0 0 */12 * * *', function() {
+new CronJob('0 0 */2 * * *', function() {
   var baseUrl = 'https://udundi-theme-editor.herokuapp.com/api/shopify_api_product/getContent/';
   var url = baseUrl + 'bunker-branding-co.myshopify.com';
   var _id = '5b352f314ef7c0140084f7d5';
